@@ -86,7 +86,6 @@ export default function Mint() {
         Mint your NFT
       </div>
       {/* input tokenid */}
-      <div>Mint Processing</div>
       <h2 className="text-xl md:text-2xl font-bold mb-2">Token ID</h2>
       <div className="input-container">
         <input
