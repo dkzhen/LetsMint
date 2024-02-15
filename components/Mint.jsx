@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Image from "next/image";
 import {
   useAccount,
   useContractRead,
@@ -7,14 +6,20 @@ import {
   useNetwork,
 } from "wagmi";
 import { abi } from "@/utils/abi";
-import ModalTransaction from "./ModalTransaction";
+import ModalTransaction from "./partials/ModalTransaction";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
+import DropdownNetwork from "./partials/DropdownNetwork";
+import Image from "next/image";
+import { chainNames } from "@/libs/wallet-connect/Web3Modal";
+import DetailItem from "./atom/DetailItem";
+import { chainImages } from "@/constants/chainImages";
+import { config } from "@/constants/config";
 
 export default function Mint() {
   const [randomId, setRandomId] = useState("");
   const [result, setResult] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-
+  const [dropdownDetails, setDropdownDetails] = useState(false);
   const { isConnected, address } = useAccount();
   const { chain } = useNetwork();
   const { open } = useWeb3Modal();
@@ -27,10 +32,20 @@ export default function Mint() {
     setRandomId(randomId.toString()); // Convert to string and set the state
   };
 
-  const chainIdMint = isConnected ? chain.id : 5;
+  const findByChain =
+    isConnected && config.find((item) => item.chain === chain?.id);
+  console.log({ findByChain });
+  const contract =
+    findByChain != undefined
+      ? findByChain.contract
+      : "0x0000000000000000000000000000000000000000";
+  const chainIdMint =
+    findByChain != undefined
+      ? findByChain.chain
+      : "0x0000000000000000000000000000000000000000";
 
   const { data } = useContractRead({
-    address: "0x18c6a99eE36608d38f3FE7193EC1507172e06873",
+    address: contract,
     abi: abi,
     chainId: chainIdMint,
     functionName: "rawOwnerOf",
@@ -40,10 +55,11 @@ export default function Mint() {
   const handleCheckMint = () => {
     if (
       randomId === "" ||
-      data == "0x0000000000000000000000000000000000000000"
+      data != "0x0000000000000000000000000000000000000000"
     ) {
       generateRandomId();
     }
+
     setResult(true);
   };
 
@@ -54,7 +70,7 @@ export default function Mint() {
     isLoading,
     isError,
   } = useContractWrite({
-    address: "0x18c6a99eE36608d38f3FE7193EC1507172e06873",
+    address: contract,
     abi: abi,
     chainId: chainIdMint,
     functionName: "mint",
@@ -68,6 +84,19 @@ export default function Mint() {
     setRandomId("");
   };
 
+  const handleToggleDropdownDetails = () => {
+    setDropdownDetails(!dropdownDetails);
+  };
+
+  const filteredNetworks = chainNames.filter(
+    (network) => network.id === chain?.id
+  );
+  const filteredLogoNetworks =
+    chainImages[filteredNetworks.map((network) => network.id)];
+
+  const nameNetwork = filteredNetworks.map((network) => network.name);
+  const chainIdNetwork = filteredNetworks.map((network) => network.id);
+
   return (
     <>
       {" "}
@@ -79,6 +108,7 @@ export default function Mint() {
           isLoading={isLoading}
           isSuccess={isSuccess}
           hash={writeData?.hash}
+          explorer={findByChain != undefined ? findByChain.explorer : ""}
         />
       )}
       {/* main */}
@@ -115,28 +145,126 @@ export default function Mint() {
                   #{randomId}
                 </span>
               </h2>
+              <h3 className="flex flex-row items-center mb-1">
+                <Image
+                  className=" pl-2 h-8 w-8"
+                  src={"/assets/desc_logo.svg"}
+                  alt="desc"
+                  width={0}
+                  height={0}
+                />
+                <p className="pl-2 text-lg font-bold">Description</p>
+              </h3>
+
               <p className="ml-2 mb-4">
                 Nova Dile is a crocodile pixel NFT that lives in a world with
                 collectible uses, and can bridge to other networks by utilizing
                 Layerzero endpoint technology with the lowest possible
                 destination chain fees. get it before it evolves!!
               </p>
-              <img
-                src="/nvd1.png"
-                alt="Generated NFT"
-                className="mx-auto w-44 md:w-60 md:h-60 h-44 mb-4"
-              />
-              {/* Toggle Buttons */}
-              <div className="flex gap-2 flex-row items-center justify-start pl-5 mb-4 bg-slate-700  p-3 mx-auto text-slate-400 rounded-lg">
-                <Image
-                  src={"/arbitrum.svg"}
-                  width={0}
-                  height={0}
-                  className="w-5 h-5 md:w-9 md:h-9"
-                  alt={"arb"}
+              <h3
+                onClick={handleToggleDropdownDetails}
+                className={`flex flex-row justify-between bg-slate-700 py-2  cursor-pointer items-center  pr-2 md:pr-10 ${
+                  !dropdownDetails ? "rounded-lg" : "rounded-t-lg"
+                }`}
+              >
+                <div className="flex flex-row items-center ">
+                  <Image
+                    className=" pl-2 h-8 w-8"
+                    src={"/assets/detail_logo.svg"}
+                    alt="desc"
+                    width={0}
+                    height={0}
+                  />
+                  <p className="pl-2 text-lg font-bold">Details</p>
+                </div>
+
+                {dropdownDetails ? (
+                  <Image
+                    className="w-7 h-7"
+                    src={"/assets/single-arrow-up.svg"}
+                    alt="arrow-up"
+                    width={0}
+                    height={0}
+                  />
+                ) : (
+                  <Image
+                    className="w-7 h-7"
+                    src={"/assets/single-arrow-down.svg"}
+                    alt="arrow-down"
+                    width={0}
+                    height={0}
+                  />
+                )}
+              </h3>
+              {dropdownDetails && (
+                <div className="pl-2 pb-2 pt-2 mb-4 flex flex-col bg-slate-700 rounded-b-lg ">
+                  <DetailItem
+                    title={"Contract Address"}
+                    data={
+                      contract.substring(0, 6) +
+                      "...." +
+                      contract.substring(contract.length - 4)
+                    }
+                    link={findByChain.explorer + "/address/" + contract}
+                  />
+                  <DetailItem title={"Token ID"} data={randomId} link={null} />
+                  <DetailItem
+                    title={"Token Standard"}
+                    data={"ERC721"}
+                    link={null}
+                  />
+                  <DetailItem
+                    title={"Network"}
+                    data={nameNetwork}
+                    link={null}
+                  />
+                </div>
+              )}
+              <div className="relative items-center flex-col flex justify-center">
+                <img
+                  src={`/nfts/nvd${randomId
+                    .toString()
+                    .charAt(randomId.toString().length - 1)}.png`}
+                  alt="Generated NFT"
+                  className="mx-auto w-44 md:w-60 md:h-60 h-44 mb-4 mt-10 rounded-lg"
                 />
-                <p className="text-lg md:text-xl">Arbitrum</p>
+                {filteredNetworks.length > 0 ? (
+                  <img
+                    src={filteredLogoNetworks}
+                    alt={nameNetwork}
+                    className="absolute -bottom-16 md:-bottom-20 w-16 h-16 md:w-20 md:h-20 rounded-lg"
+                  />
+                ) : (
+                  <img
+                    src={"/assets/images/sad.png"}
+                    alt={"sad"}
+                    className="absolute -bottom-16 md:-bottom-20 rounded-lg"
+                  />
+                )}
+                {filteredNetworks.length > 0 ? (
+                  <div
+                    style={{ fontFamily: "Protest Riot" }}
+                    className="relative font-protest font-normal gradient-name-network text-xl md:text-3xl"
+                  >
+                    {nameNetwork}
+                  </div>
+                ) : (
+                  <div
+                    style={{ fontFamily: "Protest Riot" }}
+                    className="relative font-protest font-normal gradient-name-network text-xl md:text-3xl"
+                  >
+                    Network is not supported
+                  </div>
+                )}
               </div>
+
+              {/* togle button mainnet testnet */}
+
+              {/* Toggle Buttons */}
+              {isConnected && <DropdownNetwork />}
+
+              {/* toogle button end */}
             </div>
           </div>
         ) : (
@@ -149,20 +277,20 @@ export default function Mint() {
         onClick={
           result
             ? isConnected
-              ? chain.id == 5
+              ? chain?.id == chainIdNetwork
                 ? handleMint
                 : () => open({ view: "Networks" })
-              : () => open({ view: "Connect" })
+              : () => open({ view: "Connect" }, setResult(false))
             : handleCheckMint
         }
       >
         {result
           ? isConnected
-            ? chain.id == 5
+            ? chain?.id == chainIdNetwork
               ? "Mint"
               : "Switch Network"
             : "Connect Wallet"
-          : "Check Mint"}
+          : "Check Available"}
       </button>
     </>
   );
