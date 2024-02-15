@@ -34,7 +34,6 @@ export default function Mint() {
 
   const findByChain =
     isConnected && config.find((item) => item.chain === chain?.id);
-  console.log({ findByChain });
   const contract =
     findByChain != undefined
       ? findByChain.contract
@@ -229,20 +228,22 @@ export default function Mint() {
                   alt="Generated NFT"
                   className="mx-auto w-44 md:w-60 md:h-60 h-44 mb-4 mt-10 rounded-lg"
                 />
-                {filteredNetworks.length > 0 ? (
+                {isConnected && filteredNetworks.length > 0 ? (
                   <img
                     src={filteredLogoNetworks}
                     alt={nameNetwork}
                     className="absolute -bottom-16 md:-bottom-20 w-16 h-16 md:w-20 md:h-20 rounded-lg"
                   />
                 ) : (
-                  <img
-                    src={"/assets/images/sad.png"}
-                    alt={"sad"}
-                    className="absolute -bottom-16 md:-bottom-20 rounded-lg"
-                  />
+                  isConnected && (
+                    <img
+                      src={"/assets/images/sad.png"}
+                      alt={"sad"}
+                      className="absolute -bottom-16 md:-bottom-20 rounded-lg"
+                    />
+                  )
                 )}
-                {filteredNetworks.length > 0 ? (
+                {isConnected && filteredNetworks.length > 0 ? (
                   <div
                     style={{ fontFamily: "Protest Riot" }}
                     className="relative font-protest font-normal gradient-name-network text-xl md:text-3xl"
@@ -250,12 +251,14 @@ export default function Mint() {
                     {nameNetwork}
                   </div>
                 ) : (
-                  <div
-                    style={{ fontFamily: "Protest Riot" }}
-                    className="relative font-protest font-normal gradient-name-network text-xl md:text-3xl"
-                  >
-                    Network is not supported
-                  </div>
+                  isConnected && (
+                    <div
+                      style={{ fontFamily: "Protest Riot" }}
+                      className="relative font-protest font-normal gradient-name-network text-xl md:text-3xl"
+                    >
+                      Network is not supported
+                    </div>
+                  )
                 )}
               </div>
 
