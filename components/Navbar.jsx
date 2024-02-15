@@ -1,9 +1,4 @@
-import { useWeb3Modal } from "@web3modal/wagmi/react";
-import React from "react";
-
 export default function Navbar() {
-  const { open } = useWeb3Modal();
-
   return (
     <nav className="bg-[#18212d] text-white w-full py-4">
       <div className="container mx-auto">
