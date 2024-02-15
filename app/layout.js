@@ -1,7 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { headers } from "next/headers";
-import { Web3Modal } from "@/context/Web3Modal";
+import { Web3Modal } from "@/libs/wallet-connect/Web3Modal";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -8,6 +8,7 @@ export default function ModalTransaction({
   isSuccess,
   isLoading,
   hash,
+  explorer,
 }) {
   const toggleModal = () => {
     setOpenModal(!openModal);
@@ -206,7 +207,8 @@ export default function ModalTransaction({
 
                     {isSuccess && (
                       <Link
-                        href={`https://goerli.etherscan.io/tx/${hash}`}
+                        target="_blank"
+                        href={`${explorer}/tx/${hash}`}
                         className="inline-flex items-center py-2 px-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 "
                       >
                         Blockchain explorer

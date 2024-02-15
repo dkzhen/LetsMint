@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap");
+
 .input-container {
   position: relative;
   width: 100%; /* Sesuaikan dengan kebutuhan */
@@ -46,6 +48,22 @@
   -webkit-text-fill-color: white;
   text-fill-color: white;
 }
+.gradient-name-network {
+  background: linear-gradient(170deg, #1de5e2, #b588f7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
+}
+
+.gradient-name-network:hover {
+  cursor: pointer;
+  background: linear-gradient(170deg, #b597f6, #96c6ea);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
+}
 
 /* Modal Container */
 .modal {
@@ -82,4 +100,18 @@
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+#style-14::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px transparent;
+  background-color: transparent;
+}
+
+#style-14::-webkit-scrollbar {
+  width: 10px;
+  background-color: transparent;
+}
+
+#style-14::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  background-image: transparent;
 }

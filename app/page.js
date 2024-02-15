@@ -22,10 +22,10 @@ export default function Home() {
         className="flex-1 overflow-y-auto bg-cover bg-center"
         style={{ backgroundImage: "url('/map.png')" }}
       >
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-2 md:px-4 py-4  md:py-8">
           {/* Card */}
-          <div className="max-w-full md:max-w-lg lg:max-w-4xl mx-auto">
-            <div className="bg-primary text-white  shadow-md p-6 rounded-lg bg-opacity-70">
+          <div className="max-w-full md:max-w-lg lg:max-w-4xl mx-auto mb-3 md:mb-0">
+            <div className="bg-primary text-white  shadow-md p-3 md:p-6 rounded-lg bg-opacity-70">
               {/* Toggle Buttons */}
               <div className="flex items-center justify-center mb-4 bg-black md:w-[300px] p-3 mx-auto text-slate-400 rounded-lg">
                 <button
