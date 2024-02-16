@@ -11,6 +11,6 @@ export const chainImages = {
   8217: url + "/chains/klaytn.svg",
   250: url + "/chains/fantom.svg",
   100: url + "/chains/gnosis.svg",
-  11155111: url + "/chains/sepolia.png",
+  11155111: url + "/chains/ethereum.svg",
   168587773: url + "/chains/blast.svg",
 };
