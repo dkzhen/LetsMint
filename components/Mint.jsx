@@ -34,11 +34,12 @@ export default function Mint() {
 
   const findByChain =
     isConnected && config.find((item) => item.chain === chain?.id);
-
+  console.log({ findByChain });
   const contract =
-    findByChain != undefined
+    findByChain && findByChain.contract !== undefined
       ? findByChain.contract
       : "0x0000000000000000000000000000000000000000";
+
   const chainIdMint = findByChain != undefined ? findByChain.chain : "1";
 
   const { data } = useContractRead({
@@ -93,6 +94,7 @@ export default function Mint() {
 
   const nameNetwork = filteredNetworks.map((network) => network.name);
   const chainIdNetwork = filteredNetworks.map((network) => network.id);
+  console.log({ contract });
 
   return (
     <>
