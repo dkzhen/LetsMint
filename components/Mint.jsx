@@ -203,7 +203,11 @@ export default function Mint() {
                       "...." +
                       contract.substring(contract.length - 4)
                     }
-                    link={findByChain.explorer + "/address/" + contract}
+                    link={
+                      findByChain != undefined
+                        ? findByChain.explorer
+                        : "" + "/address/" + contract
+                    }
                   />
                   <DetailItem title={"Token ID"} data={randomId} link={null} />
                   <DetailItem
