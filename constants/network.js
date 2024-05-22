@@ -35,7 +35,7 @@ export const networkAvailable = [
     status: "live",
   },
   {
-    id: 4,
+    id: 9,
     image: "/chains/blast.svg",
     name: "Blast Sepolia",
     chain: 168587773,
